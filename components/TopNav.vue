@@ -73,7 +73,7 @@
                             id="PopupMenu" 
                             class="absolute bg-white rounded-lg py-1.5 w-[200px] mt-2 shadow-xl border top-[43px] -right-2"
                         >
-                            <NuxtLink 
+                            <NuxtLink to="/profile/1"
                                 @click="$event => showMenu = false" 
                                 class="flex items-center justify-start py-3 px-2 hover:bg-gray-100 cursor-pointer"
                             >
