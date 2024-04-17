@@ -7,7 +7,7 @@
             v-model:input="name"
             inputType="text"
             :autoFocus="true"
-            error=""
+            :error="errors && errors.name ? errors.name[0] : ''"
         />
     </div>
 
@@ -16,7 +16,7 @@
             placeholder="Email"
             v-model:input="email"
             inputType="email"
-            error=""
+            :error="errors && errors.email ? errors.email[0] : ''"
         />
     </div>
 
@@ -25,7 +25,7 @@
             placeholder="Password"
             v-model:input="password"
             inputType="password"
-            error=""
+            :error="errors && errors.password ? errors.password[0] : ''"
         />
     </div>
 
@@ -34,7 +34,7 @@
             placeholder="Konfirmasi password"
             v-model:input="confirmPassword"
             inputType="password"
-            error=""
+            :error="errors && errors.confirmPassword ? errors.confirmPassword[0] : ''"
         />
     </div>
     <div class="px-6 text-[12px] text-gray-600">Lupa password?</div>
@@ -52,9 +52,33 @@
 </template>
 
 <script setup>
+    const {$userStore, $generalStore} = useNuxtApp();
+
     let name = ref(null)
     let email = ref(null)
     let password = ref(null)
     let confirmPassword = ref(null)
     let errors = ref(null)
+
+    const register = async()=>{
+        errors.value = null;
+
+        try {
+            await $userStore.getTokens();
+            await $userStore.register(
+                name.value,
+                email.value,
+                password.value,
+                confirmPassword.value
+            );
+            await $userStore.getUser();
+
+            $generalStore.isLoginOpen = false;
+        } catch (error) {
+            console.log(error);
+            errors.value = error.response.data.errors;
+        }
+    };
 </script>
+
+<!-- Sampai menit 2.06 -->

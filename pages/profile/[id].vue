@@ -4,7 +4,7 @@
             <div class="flex w-[calc(100vw-230px)]">
                 <img 
                     class="max-w-[120px] rounded-full" 
-                    src="https://picsum.photos/id/8/300/320"
+                    :src="$userStore.image"
                 >
                 <div class="ml-5 w-full">
                     <div class="text-[30px] font-bold truncate">
@@ -76,3 +76,5 @@
     const {$generalStore} = useNuxtApp();
 
 </script>
+
+<!-- Sampai menit 1.49 -->

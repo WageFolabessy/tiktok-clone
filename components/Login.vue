@@ -9,7 +9,7 @@
             v-model:input="email"
             inputType="email"
             :autoFocus="true"
-            error=""
+            :error="errors && errors.email ? errors.email[0] : ''"
         />
     </div>
 
@@ -34,7 +34,23 @@
     </div>
 </template>
 <script setup>
+    const {$userStore, $generalStore} = useNuxtApp();
+
     let email = ref(null);
     let password = ref(null);
     let errors = ref(null);
+
+    const login = async () =>{
+        errors.value = null;
+        try {
+            await $userStore.getTokens();
+            await $userStore.login(email.value, password.value);
+            await $userStore.getUser();
+
+            $generalStore.isLoginOpen = false;
+        } catch (error) {
+            console.log(error);
+            errors.value = error.response.data.errors;
+        }
+    };
 </script>

@@ -35,12 +35,11 @@
                 class="flex items-center justify-end gap-3 min-w-[275px] max-w-[320px] w-full"
             >
                 <button
+                    @click="$event=>isLoggedIn()"
                     class="flex items-center border rounded-sm px-3 py-[6px] hover:bg-gray-100"
                 >
                     <Icon name="mdi:plus" color="#000" size="22"/>
-                    <nuxt-link to="/upload">
-                        <span class="px-2 font-medium text-15px">Unggah</span>
-                    </nuxt-link>
+                    <span class="px-2 font-medium text-15px">Unggah</span>
                 </button>
                 <div 
                     v-if="!$userStore.id"
@@ -63,7 +62,7 @@
                             @click="$event => showMenu = !showMenu"
                         >
                             <img
-                                src="https://picsum.photos/id/83/300/320"
+                                :src="$userStore.image"
                                 alt="profile"
                                 class="rounded-full"
                                 width="33"
@@ -74,7 +73,8 @@
                             id="PopupMenu" 
                             class="absolute bg-white rounded-lg py-1.5 w-[200px] mt-2 shadow-xl border top-[43px] -right-2"
                         >
-                            <NuxtLink to="/profile/1"
+                            <NuxtLink
+                                :to="`/profile/${$userStore.id}`"
                                 @click="$event => showMenu = false" 
                                 class="flex items-center justify-start py-3 px-2 hover:bg-gray-100 cursor-pointer"
                             >
@@ -82,6 +82,7 @@
                                 <span class="pl-2 font-semibold text-sm">Profil</span>
                             </NuxtLink>
                             <div
+                                @click="$event=>logout()"
                                 class="flex items-center justify-start py-3 px-1.5 hover:bg-gray-100 border-t cursor-pointer"
                             >
                                 <Icon name="ic:outline-login" size="20" color="#F02C56" />
@@ -96,8 +97,38 @@
 </template>
 <script setup>
     const {$userStore, $generalStore} = useNuxtApp();
+
     const route = useRoute();
+    const router = useRouter();
+
     let showMenu = ref(false);
+
+    onMounted(() =>{
+        document.addEventListener('mouseup', function(e){
+            let popupMenu = document.getElementById('PopupMenu');
+            if(!popupMenu.contains(e.target)){
+                showMenu.value = false;
+            }
+        });
+    });
+
+    const isLoggedIn = () =>{
+        if($userStore.id){
+            router.push('/upload');
+        }
+        else{
+            $generalStore.isLoginOpen = true;
+        }
+    };
+
+    const logout = () =>{
+        try {
+            $userStore.logout();
+            router.push('/');
+        } catch (error) {
+            console.log(error);
+        }
+    };
 </script>
 
 <!-- sampai menit 14 -->
