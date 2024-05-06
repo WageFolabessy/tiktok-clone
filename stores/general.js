@@ -42,7 +42,16 @@ export const useGeneralStore = defineStore('general', {
                         return Promise.reject(error);
                 }
             });
+        },
+
+        allLowerCaseNoCaps(str){
+            return str.split(' ').join('').toLowerCase();
+        },
+
+        setBackUrl(url){
+            this.isBackUrl = url;
         }
+        
     },
     persist: true,
   })

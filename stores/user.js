@@ -41,6 +41,10 @@ export const useUserStore = defineStore('user', {
             this.resetUser();
         },
 
+        async createPost(data) {
+            return await $axios.post('/api/posts', data)
+        },
+
         resetUser(){
             this.$state.id = '';
             this.$state.name = '';
